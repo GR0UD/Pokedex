@@ -182,6 +182,13 @@ form {
   width: 100%;
 }
 
+#info h2 {
+  font-size: 3.5rem;
+}
+#info p {
+  opacity: 0.75;
+}
+
 /* Showcase Image */
 #showcase-image {
   width: 350px;
@@ -217,6 +224,7 @@ form {
   border-radius: 3rem;
   font-size: 2rem;
   font-weight: bold;
+  color: white;
 }
 
 #details-button:hover {
@@ -228,7 +236,7 @@ form {
 #show-more-button {
   padding: 1.5rem;
   border-radius: 5rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: bold;
 }
 

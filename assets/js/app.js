@@ -51,12 +51,9 @@ function loadPokemon(offset, limit) {
             fetch(pokemon.species.url)
               .then((speciesResponse) => speciesResponse.json())
               .then((speciesData) => {
-                const race = speciesData.name;
-
                 selectedInfoDiv.innerHTML = `
-                  <h1>${pokemon.name}</h1>
+                  <h2>${pokemon.name}</h2>
                   <p><strong>Type:</strong> ${types}</p>
-                  <p><strong>Race:</strong> ${race}</p>
                 `;
 
                 localStorage.setItem(

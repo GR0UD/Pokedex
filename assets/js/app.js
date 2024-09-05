@@ -12,34 +12,48 @@ fetch(API_URL)
 
     Promise.all(pokemonPromises).then((pokemonDetails) => {
       const listeDiv = document.getElementById("pokemon-list");
-      const selectedImageDiv = document.getElementById("image");
+      const selectedImageDiv = document.getElementById("showcase-image");
       const selectedInfoDiv = document.getElementById("info");
 
       pokemonDetails.forEach((pokemon) => {
         const img = document.createElement("img");
         img.src = pokemon.sprites.front_default;
+        img.classList.add("selected-pokemon");
 
         img.addEventListener("click", () => {
           const newUrl = new URL(window.location);
           newUrl.searchParams.set("name", pokemon.name);
           window.history.pushState({}, "", newUrl);
 
-          selectedImageDiv.innerHTML = "";
-          selectedInfoDiv.innerHTML = "";
+          // Update the src of the existing image inside selectedImageDiv
+          const existingImg = selectedImageDiv.querySelector("img");
+          if (existingImg) {
+            existingImg.src = pokemon.sprites.front_default; // Update src if image exists
+          } else {
+            // If no image exists, create it and append it (just as a fallback)
+            const selectedImg = document.createElement("img");
+            selectedImg.src = pokemon.sprites.front_default;
+            selectedImageDiv.appendChild(selectedImg);
+          }
 
-          const selectedImg = document.createElement("img");
-          selectedImg.src = pokemon.sprites.front_default;
-          selectedImageDiv.appendChild(selectedImg);
+          // Extract types as a comma-separated list
+          const types = pokemon.types.map((typeInfo) => typeInfo.type.name).join(", ");
 
-          const info = document.createElement("div");
-          info.innerHTML = `
-                        <h1>${pokemon.name}</h1>
-                        <p><strong>Base Experience:</strong> ${pokemon.base_experience}</p>
-                        <p><strong>Weight:</strong> ${pokemon.weight}</p>
-                    `;
-          selectedInfoDiv.appendChild(info);
+          // Fetch species details for race
+          fetch(pokemon.species.url)
+            .then((speciesResponse) => speciesResponse.json())
+            .then((speciesData) => {
+              const race = speciesData.name;
 
-          localStorage.setItem("selectedPokemon", JSON.stringify(pokemon));
+              selectedInfoDiv.innerHTML = ""; 
+              selectedInfoDiv.innerHTML = `
+                <h1 class="" )>${pokemon.name}</h1>
+                <p><strong>Type:</strong> ${types}</p>
+                <p><strong>Race:</strong> ${race}</p>
+              `;
+
+              localStorage.setItem("selectedPokemon", JSON.stringify(pokemon));
+            });
         });
 
         listeDiv.appendChild(img);
